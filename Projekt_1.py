@@ -1,5 +1,12 @@
 class Transformacje:
     def __init__(self, ellipsoid="wgs84"):
+        """
+        Parametry elipsoid:
+            self.a -  promień równikowy
+            self.b -  promień południkowy
+            flattening - spłaszczenie
+            e2 - kwadrat mimośrodu
+        """
         if ellipsoid == "wgs84":
             self.a = 6378137.0
             self.b = 6356752.31424518
@@ -7,11 +14,25 @@ class Transformacje:
             self.a = 6378137.0
             self.b = 6356752.31414036
         else:
-            print("This ellipsoid is not supported")
+            print("Błędna elipsoida")
         self.flattening = (self.a - self.b) / self.a
         self.e2 = sqrt(2 * self.flattening - self.flattening ** 2)
 
     def hirvonen(self, X, Y, Z):
+        """
+        Funkcja przelicza współrzędne geocentryczn na współrzędne geodezyjne.
+        Parametry:
+      
+        X  [float] : współrzędna geocentryczna [m]
+        Y  [float] : współrzędna geocentryczna [m]
+        Z  [float] : współrzędna geocentryczna [m]
+            
+        Funkcja zwraca:
+      
+        fi [float] : szerokość geodezyjna [rad]
+        lam [float] : długość geodezyjna [rad]
+        h  [float] : wysokość elipsoidalna [m]
+        """
         r = math.sqrt(X ** 2 + Y ** 2)
         fi_n = math.atan(Z / (r * (1 - self.e2)))
         eps = 0.000001 / 3600 * math.pi / 180
@@ -24,7 +45,22 @@ class Transformacje:
         lam = math.atan(Y / X)
         h = r / np.cos(fi_n) - N
         return fi, lam, h
+    
     def geodetic_to_geocentric(self, fi, lam, h):
+        """
+        Funkcja przelicza współrzędne geodezyjne  
+        na współrzędne geocentryczne.
+        Parametry:
+       
+        fi [float] : szerokość geodezyjna [rad]
+        lam[float] : długość geodezyjna [rad]
+        h   [float] : wysokość elipsoidalna [m]
+        Funkcja zwraca:
+        
+        X [float] : współrzędna geocentryczna[m]
+        Y [float] : współrzędna geocentryczna[m]
+        Z [float] : współrzędna geocentryczna[m]
+        """
         N = self.a / math.sqrt(1 - self.e2 * math.sin(fi) ** 2)
         X = (N + h) * math.cos(fi) * math.cos(lam)
         Y = (N + h) * math.cos(fi) * math.sin(lam)
@@ -32,6 +68,23 @@ class Transformacje:
         return (X, Y, Z)
 
     def compute_neu(self, X0, Y0, Z0, X, Y, Z):
+        """   
+        Funkcja przelicza współrzędne geodezyjne  
+        na współrzędne topograficzne.
+        Parametry:
+        X0 [float] : współrzędna geocentryczna[m]
+        Y0 [float] : współrzędna geocentryczna[m]
+        Z0 [float] : współrzędna geocentryczna[m]
+        X [float] : współrzędna geocentryczna[m]
+        Y [float] : współrzędna geocentryczna[m]
+        Z [float] : współrzędna geocentryczna[m]
+      
+        Funkcja zwraca:
+        N [float] : wpółrzedna topocentryczna N (north) [m]
+        E [float] : wpółrzedna topocentryczna E (east) [m]
+        U [float] : wpółrzedna topocentryczna U (up) [m]
+    
+        """  
         fi, lam, h = self.hirvonen(X, Y, Z)
 
         delta_X = X - X0
@@ -50,6 +103,19 @@ class Transformacje:
         u = neu[2, 0]
         return (n, e, u)
     def geo_to_flat_2000(self, fi, lam):
+        """   
+        Funkcja przelicza współrzędne geodezyjne  
+        na współrzędne układu 2000.
+    
+        Parametry:
+        fi  [float] : szerokość geodezyjna [rad]
+        lam [float] : długość geodezyjna [rad]
+    
+        Funkcja zwraca:
+        x00 [float] : współrzędna w układzie płaskim 2000 [m]
+        y00 [float] : współrzędna w układzie płaskim 2000 [m]
+    
+        """
         m = 0.999923
         N = self.a / math.sqrt(1 - self.e2 * math.sin(fi) ** 2)
         t = np.tan(fi)
@@ -95,6 +161,19 @@ class Transformacje:
         return (x00, y00)
 
     def geo_to_flat_1992(self, fi, lam):
+        """   
+        Funkcja przelicza współrzędne geodezyjne  
+        na współrzędne układu 1992.
+    
+        Parametry:
+        fi  [float] : szerokość geodezyjna [rad]
+        lam [float] : długość geodezyjna [rad]
+    
+        Funkcja zwraca:
+        x92 [float] : współrzędna w układzie płaskim 1992 [m]
+        y92 [float] : współrzędna w układzie płaskim 1992 [m]
+    
+        """
         m_0 = 0.9993
         N = self.a / (np.sqrt(1 - self.e2 * np.sin(fi) ** 2))
         t = np.tan(fi)
