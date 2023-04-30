@@ -1,5 +1,5 @@
 import argparse
-from coordinatetransforms import CoordinateTransforms
+from Projekt_1 import Transformacje
 import numpy as np
 
 def read_coordinates_from_file(file_path):
