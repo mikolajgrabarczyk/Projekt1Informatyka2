@@ -19,9 +19,9 @@ def write_results_to_file(output_file_path, results_array):
 
 def execute():
 
-    arg_parser = argparse.ArgumentParser(description="Coordinate transformation program.")
-    arg_parser.add_argument("-i", "--input", help="path to input file with coordinates")
-    arg_parser.add_argument("-o", "--output", help="path to output file with results")
+    arg_parser = argparse.ArgumentParser(description="Program do przeliczania wspolrzednych")
+    arg_parser.add_argument("-i", "--input", help="dodaj plik z danymi wejsciowymi")
+    arg_parser.add_argument("-o", "--output", help="otrzymaj plik z wynikami")
 
     arguments = arg_parser.parse_args()
 
@@ -38,16 +38,16 @@ def execute():
 
         transformResults = []
 
-        print('Choose ellipsoid:')
+        print('Wybierz elipsoide')
         print('1 | WGS84')
         print('2 | GRS80')
-        selected = input('Selection: ')
+        selected = input('Wybór: ')
         if selected == '1':
             ellipsoid = CoordinateTransforms("wgs84")
         elif selected == '2':
             ellipsoid = CoordinateTransforms("grs80")
         else:
-            print("Unknown ellipsoid")
+            print("Nieznana elipsoida")
 
         for i in range(rows):
             geodetic_coords[i] = ellipsoid.hirvonen(input_coordinates[i, 0], input_coordinates[i, 1], input_coordinates[i, 2])
@@ -59,17 +59,17 @@ def execute():
 
 
         while True:
-            print("\nOptions:")
-            print("1 | Transform geocentric coordinates to geodetic coordinates")
-            print("2 | Transform geodetic coordinates to geocentric coordinates")
-            print("3 | Compute topocentric coordinates E,N,U")
-            print("4 | Transform geodetic coordinates to flat 2000 coordinates")
-            print("5 | Transform geodetic coordinates to flat 1992 coordinates")
-            print("6 | Exit")
-            selected = input("\nChoose option (1-6): ")
+            print("\nOpcje:")
+            print("1 | Transformuj z geocentrycznych na geodezyjne")
+            print("2 | Transformuj z geodezyjnych na geocentryczne")
+            print("3 | Przelicz z topocentrycznych na  NEU")
+            print("4 | Transformuj z geodezyjnych na plaskie 2000")
+            print("5 | Transformuj z geodezyjnych na plaskie 1992")
+            print("6 | Wyjdz")
+            selected = input("\nWybierz opcje(1-6): ")
 
             if selected == '1':
-                print('Geodetic latitude | Geodetic longitude | Ellipsoid height')
+                print('Szerokosc geodezyjna | Dlugosc geodezyjna | Wysokosc elipsoidy')
                 for i in range(rows):
                     geodetic_coords[i] = ellipsoid.hirvonen(input_coordinates[i, 0], input_coordinates[i, 1], input_coordinates[i, 2])
                     print(f'{geodetic_coords[i][0]} | {geodetic_coords[i][1]} | {geodetic_coords[i][2]}')
@@ -88,28 +88,28 @@ def execute():
                     print(f'{topocentric_coords[i][0]} | {topocentric_coords[i][1]} | {topocentric_coords[i][2]}')
                     transformResults.append(topocentric_coords[i])
             elif selected == '4':
-                print('Flat_2000_X | Flat_2000_Y')
+                print('2000_X | 2000_Y')
                 for i in range(rows):
                     flat_2000_coords[i] = ellipsoid.geo_to_flat_2000(geodetic_coords[i, 0], geodetic_coords[i, 1])
                     print(f'{flat_2000_coords[i][0]} | {flat_2000_coords[i][1]}')
                     transformResults.append(flat_2000_coords[i])
             elif selected == '5':
-                print('Flat_1992_X | Flat_1992_Y')
+                print('1992_X | 1992_Y')
                 for i in range(rows):
                     flat_1992_coords[i] = ellipsoid.geo_to_flat_1992(geodetic_coords[i, 0], geodetic_coords[i, 1])
                     print(f'{flat_1992_coords[i][0]} | {flat_1992_coords[i][1]}')
                     transformResults.append(flat_1992_coords[i])
             elif selected == '6':
-                print("Exiting the program.")
+                print("Wychodzenie z programu")
                 break
             else:
-                print("Invalid choice, please try again.")
+                print("Nieudana próba, spróbuj ponownie")
 
             write_results_to_file(output_file_path, transformResults)
-            print("Transformation completed successfully. Results saved to the output file.")
+            print("Transformacja przebiegła pomyślne , wyniki są dostępne w pliku wyjściowym")
             break
     else:
-        print("Missing input or output file. Please try again with correct arguments.")
+        print("Brak odpowiedniej liczby argrumentów")
 
 if __name__ == "__main__":
     execute()
