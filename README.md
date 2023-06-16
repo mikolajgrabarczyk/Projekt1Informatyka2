@@ -2,7 +2,7 @@
 
 ## Opis
 
-Ten program oferuje funkcjonalność przekształcania współrzędnych pomiędzy dwoma formatami: XYZ i BLH. Obsługuje wiele elipsoid, w tym WGS84, GRS80 i Clarke 1866.
+Ten program oferuje funkcjonalność przekształcania współrzędnych pomiędzy dwoma formatami: XYZ i BLH. Obsługuje wiele elipsoid, w tym WGS84, GRS80.
 
 ## Wymagania
 
@@ -33,9 +33,12 @@ Przykład użycia programu:
 python main.py --input input_coordinates.txt --output output_results.txt
 ```
 
+3. Wybierz elipsoidę, na której zostały zapisane współrzędne XYZ (np. `WGS84`).
 
-3. Wyniki przekształceń zostaną zapisane w pliku wyjściowym (np. `output_results.txt`).
+
+4. Wyniki przekształceń zostaną zapisane w pliku wyjściowym (np. `output_results.txt`).
 
 ## Znane błędy i nietypowe zachowania
+Transformacja Krasowski -> 2000 daje błedne rezultaty i nie powinna być uzywana
 
-Na chwilę obecną nie są znane żadne błędy ani nietypowe zachowania programu. W przypadku napotkania problemów prosimy zgłosić je w sekcji Issues na GitHubie.
+- 

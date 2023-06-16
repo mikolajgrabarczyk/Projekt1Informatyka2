@@ -1,5 +1,6 @@
 import argparse
-from Projekt_1 import Transformacje
+
+from Transform import Transformacje
 import numpy as np
 
 def read_coordinates_from_file(file_path):
@@ -41,11 +42,12 @@ def execute():
         print('Wybierz elipsoide')
         print('1 | WGS84')
         print('2 | GRS80')
+        print('Wybierz numer elipsoidy:')
         selected = input('Wybór: ')
         if selected == '1':
-            ellipsoid = CoordinateTransforms("wgs84")
+            ellipsoid = Transformacje("wgs84")
         elif selected == '2':
-            ellipsoid = CoordinateTransforms("grs80")
+            ellipsoid = Transformacje("grs80")
         else:
             print("Nieznana elipsoida")
 
@@ -83,8 +85,9 @@ def execute():
             elif selected == '3':
                 print('N | E | U')
                 for i in range(rows):
-                    topocentric_coords[i] = ellipsoid.compute_neu(input_coordinates[i, 0], input_coordinates[i, 1], input_coordinates[i, 2],
-                    input_coordinates[i, 0] + 1, input_coordinates[i, 1] + 1, input_coordinates[i, 2] + 1)
+                    topocentric_coords[i] = ellipsoid.compute_neu(input_coordinates[i, 0], input_coordinates[i, 1],
+                                                                  input_coordinates[i, 2],
+                                                                  geodetic_coords[i, 0], geodetic_coords[i, 1], geodetic_coords[i, 2])
                     print(f'{topocentric_coords[i][0]} | {topocentric_coords[i][1]} | {topocentric_coords[i][2]}')
                     transformResults.append(topocentric_coords[i])
             elif selected == '4':
