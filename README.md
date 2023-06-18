@@ -40,5 +40,7 @@ python main.py --input input_coordinates.txt --output output_results.txt
 
 ## Znane błędy i nietypowe zachowania
 Transformacja Krasowski -> 2000 daje błedne rezultaty i nie powinna być uzywana
+Transformacja Krasowski -> 1992 daje błedne rezultaty i nie powinna być uzywana
 
-- 
+
+Poprawiono dokumentacje w kodzie odnośnie przeksztalcenia NEU
