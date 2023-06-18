@@ -85,7 +85,9 @@ class Transformacje:
         N [float] : wpółrzedna topocentryczna N (north) [m]
         E [float] : wpółrzedna topocentryczna E (east) [m]
         U [float] : wpółrzedna topocentryczna U (up) [m]
-        Punkty z dopiskiem 0 są początkiem układu współrzędnych.
+        
+        Punkty z dopiskiem 0 są początkiem układu współrzędnych.(Początek wektora NEU)
+        Punktuy bez dopiska 0 reprezentują nasz punkt.
 
         """
         import numpy as np
